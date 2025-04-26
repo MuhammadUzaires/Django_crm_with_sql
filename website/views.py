@@ -74,3 +74,16 @@ def  customer_add(req):
     else:
         messages.success(req,"You Must Be Logged In To Do That.....")
         return redirect('home')
+
+def customer_update(req, pk):
+    if req.user.is_authenticated:
+        current_record=Record.objects.get(id=pk)
+        form=AddRecordForm(req.POST or None, instance=current_record)
+        if form.is_valid():
+            form.save()
+            messages.success(req,"Record Must be updated.....")
+            return redirect('home')
+        return render(req,"website/update_record.html",{'form':form})
+    else:
+        messages.success(req,"You Must Be Logged In To Do That.....")
+        return redirect('home')
